@@ -4,7 +4,7 @@
 !/.env.example
 *.env
 fornex.env
-var/
+var/*
 !var/.gitkeep
 *.sqlite
 *.sqlite-*
