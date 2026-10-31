@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- README: the summary paragraph now sits directly after the H1 and the language switcher
+  moved below it, so tooling that reads the first paragraph (`ghagent meta suggest`) sees the
+  product summary instead of the `md-i18n` comment.
+
 ## [1.1.0] - 2026-11-01
 
 First public release. The tree published here is the code that had been running as a

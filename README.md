@@ -1,9 +1,9 @@
 # Fornex Control
 
+**A self-hosted panel for Fornex DNS zones: web interface, JSON API and CLI — with a snapshot of the zone taken before every write.**
+
 <!-- md-i18n:switcher -->
 **Read this in:** English · [Русский](README.ru.md)
-
-**A self-hosted panel for Fornex DNS zones: a web interface for people, a JSON API and a CLI for scripts — with a snapshot of the zone taken before every write.**
 
 [![CI](https://github.com/paulmann/fornex-control/actions/workflows/ci.yml/badge.svg)](https://github.com/paulmann/fornex-control/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -266,11 +266,15 @@ step must report `done`/`todo`/`blocked`/`empty` correctly.
 
 ## FAQ
 
-**Does it work without an API key?** No — the panel refuses to start; the key is the only way to read a zone. `help` and `preset:list` still run so you can install confidently.
+**Does it work without an API key?** No — the panel refuses to start; the key is the only way to
+read a zone. `help` and `preset:list` still run so you can install confidently.
 
-**Can it create a zone?** Only if the Fornex account allows it. When the right is disabled the API answers `403`, and the panel explains what to send to support instead of failing silently.
+**Can it create a zone?** Only if the Fornex account allows it. When the right is disabled the API
+answers `403`, and the panel explains what to send to support instead of failing silently.
 
-**Where are the snapshots?** In `SNAPSHOT_DIR` (by default `var/snapshots/<domain>/`), a `.bind` file and a `.json` with record ids. They are not restored automatically: restoring a zone is a human decision made from the snapshot.
+**Where are the snapshots?** In `SNAPSHOT_DIR` (by default `var/snapshots/<domain>/`), a `.bind`
+file and a `.json` with record ids. They are not restored automatically: restoring a zone is a human
+decision made from the snapshot.
 
 **Is the interface translated?** The interface is in Russian; the API, the CLI, the documentation and this README are in English.
 
