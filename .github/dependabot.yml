@@ -1,0 +1,11 @@
+version: 2
+
+updates:
+  # The panel has no runtime dependencies on purpose; only the actions used by CI move.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci
+    open-pull-requests-limit: 3

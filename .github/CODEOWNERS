@@ -1,0 +1,9 @@
+# CODEOWNERS
+
+# Everything in this tree is owned by the maintainer until a second maintainer appears.
+*       @paulmann
+
+# Documentation and the wiki have the same rules as the code: a claim without a command
+# is not accepted, and the interface text and README are updated in the same change.
+/docs/  @paulmann
+/wiki/  @paulmann

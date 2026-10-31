@@ -1,0 +1,62 @@
+{
+  "repo": "paulmann/fornex-control",
+  "branch": "main",
+  "title": "Fornex Control",
+  "footer": "Fornex Control · MIT · панель для DNS-зон Fornex",
+  "groups": [
+    {
+      "title": "Начало",
+      "pages": [
+        "Home.md",
+        "01-Why-This-Exists.md",
+        "02-Getting-Started.md"
+      ],
+      "labels": {
+        "Home.md": "Обзор",
+        "01-Why-This-Exists.md": "01 · Зачем это нужно",
+        "02-Getting-Started.md": "02 · Установка"
+      }
+    },
+    {
+      "title": "Работа",
+      "pages": [
+        "03-Configuration-Reference.md",
+        "07-Mail-Presets.md",
+        "05-API.md",
+        "06-CLI.md"
+      ],
+      "labels": {
+        "03-Configuration-Reference.md": "03 · Настройки",
+        "07-Mail-Presets.md": "07 · Пресеты почты",
+        "05-API.md": "05 · API",
+        "06-CLI.md": "06 · Командная строка"
+      }
+    },
+    {
+      "title": "Устройство и эксплуатация",
+      "pages": [
+        "04-Architecture.md",
+        "08-Security.md",
+        "09-Operations.md",
+        "10-Troubleshooting.md"
+      ],
+      "labels": {
+        "04-Architecture.md": "04 · Устройство",
+        "08-Security.md": "08 · Безопасность",
+        "09-Operations.md": "09 · Эксплуатация",
+        "10-Troubleshooting.md": "10 · Неполадки"
+      }
+    },
+    {
+      "title": "Разработка",
+      "pages": [
+        "11-Development-and-Testing.md",
+        "12-FAQ.md"
+      ],
+      "labels": {
+        "11-Development-and-Testing.md": "11 · Разработка и тесты",
+        "12-FAQ.md": "12 · Частые вопросы"
+      }
+    }
+  ]
+}

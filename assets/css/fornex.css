@@ -1,0 +1,246 @@
+/* ==========================================================================
+   Fornex Control — дополнения к дизайн-системе (app.css взят из панели reg.ru).
+   Здесь только то, чего в базовой системе нет: таблицы зоны, статусы
+   проверки, блок плана, копируемый текст тикета.
+   ========================================================================== */
+
+.fnx-grid-2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 980px) {
+  .fnx-grid-2 { grid-template-columns: minmax(0, 1fr); }
+}
+
+.fnx-table th {
+  white-space: nowrap;
+}
+
+.fnx-table td.mono,
+.fnx-table th.mono {
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+
+.fnx-table td.value {
+  word-break: break-all;
+  max-width: 620px;
+}
+
+.fnx-host {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.fnx-muted {
+  color: var(--dim);
+  font-size: 12.5px;
+}
+
+/* Блок плана: создаём / меняем / пропускаем / конфликт */
+.fnx-plan {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.fnx-plan-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--card-2);
+}
+
+.fnx-plan-row .why {
+  color: var(--dim);
+  font-size: 12px;
+}
+
+.fnx-plan-row.create { border-left: 3px solid var(--ok); }
+.fnx-plan-row.update { border-left: 3px solid var(--warn); }
+.fnx-plan-row.skip   { border-left: 3px solid var(--dim-2); }
+.fnx-plan-row.conflict { border-left: 3px solid var(--bad); }
+
+.fnx-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.fnx-check + .fnx-check { margin-top: 8px; }
+
+.fnx-check .dot-lg {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex: 0 0 auto;
+}
+
+.fnx-check.ok .dot-lg { background: var(--ok); }
+.fnx-check.warn .dot-lg { background: var(--warn); }
+.fnx-check.fail .dot-lg { background: var(--bad); }
+.fnx-check.skip .dot-lg { background: var(--dim-2); }
+
+.fnx-check .title { font-weight: 600; font-size: 13.5px; }
+.fnx-check .detail { color: var(--dim); font-size: 12.5px; word-break: break-word; }
+
+/* Копируемый текст (тикет в поддержку, инструкция регистратора) */
+.fnx-copybox {
+  position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 340px;
+  overflow: auto;
+}
+
+.fnx-copybox .copy-btn,
+.fnx-copybox .btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* Список доменов */
+.fnx-domain-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.fnx-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fnx-chips .chip {
+  font-size: 11.5px;
+  padding: 2px 7px;
+}
+
+/* Панель мастера */
+.fnx-preset-list {
+  display: grid;
+  gap: 8px;
+}
+
+.fnx-preset {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.fnx-preset:hover { border-color: var(--accent); }
+.fnx-preset.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.fnx-preset .t { font-weight: 600; font-size: 13.5px; }
+.fnx-preset .d { color: var(--dim); font-size: 12.5px; margin-top: 3px; }
+
+.fnx-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.fnx-login-extra {
+  margin-top: 14px;
+  color: var(--dim-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fnx-tab-panel { padding: 16px; }
+
+.fnx-tree {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  max-height: 420px;
+  overflow: auto;
+}
+
+/* Шаги мастера: у Google порядок обязателен (подтверждение → MX/SPF → DKIM → DMARC) */
+.fnx-step {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.fnx-step.done { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); }
+.fnx-step.todo { border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
+.fnx-step.blocked { opacity: .72; }
+
+.fnx-step-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--card-2);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.fnx-step-num {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.fnx-step.done .fnx-step-num { background: var(--ok-soft); color: var(--ok); }
+
+.fnx-step-title {
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fnx-step-body { padding: 14px 16px; }
+.fnx-step-body .field { margin-top: 10px; }
+.fnx-step-body .fnx-plan { margin-top: 10px; }
+
+/* Кнопка, которая ещё не готова: остаётся кликабельной и объясняет причину */
+.btn[aria-disabled="true"] {
+  opacity: .55;
+  cursor: not-allowed;
+}

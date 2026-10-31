@@ -1,0 +1,32 @@
+# --- secrets and local state ------------------------------------------------
+.env
+.env.*
+!/.env.example
+*.env
+fornex.env
+var/
+!var/.gitkeep
+*.sqlite
+*.sqlite-*
+*.log
+
+# --- build and runtime ------------------------------------------------------
+build/
+deploy-local/
+vendor/
+composer.lock
+
+# --- tooling ----------------------------------------------------------------
+.ghagent/
+.phpunit.cache/
+.php-cs-fixer.cache
+.phpstan.cache
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+.DS_Store
+.ragraf/
+
+# --- local notes (never published) ------------------------------------------
+*.local.md

@@ -1,0 +1,319 @@
+{
+  "google-workspace": {
+    "title": "Google Workspace — почта домена",
+    "summary": "Четыре шага в правильном порядке: подтверждение домена → MX и SPF → DKIM → DMARC. DKIM Google выдаёт только после подтверждения домена, поэтому шаг 3 без шага 1 не имеет смысла.",
+    "applies_to": "домен, у которого почта идёт в Google Workspace",
+    "params": [
+      {
+        "key": "verification",
+        "label": "Строка подтверждения Google",
+        "type": "text",
+        "required": false,
+        "hint": "TXT-значение вида google-site-verification=… из Search Console (домен) или Консоли администратора. Без неё домен не подтверждён и DKIM не выдадут."
+      },
+      {
+        "key": "dkim",
+        "label": "DKIM-ключ из Консоли администратора",
+        "type": "textarea",
+        "required": false,
+        "hint": "Строка целиком, начинается с v=DKIM1; k=rsa; p=… Вставлять как есть, без переносов."
+      },
+      {
+        "key": "dmarc",
+        "label": "Запись DMARC",
+        "type": "text",
+        "required": false,
+        "default": "v=DMARC1; p=none; rua=mailto:postmaster@{domain}; adkim=r; aspf=r; pct=100",
+        "hint": "Начинаем с p=none: так отчёты уже приходят, а письма не режутся. Когда убедитесь, что вся почта идёт через Google, поставьте p=quarantine."
+      }
+    ],
+    "steps": [
+      {
+        "id": "verify",
+        "title": "Шаг 1. Подтверждение домена",
+        "summary": "Google должен убедиться, что домен ваш. Строка подтверждения добавляется в зону как TXT на имени @; проверка в консоли занимает минуты.",
+        "hint": "Строку выдаёт Google: Search Console → «Добавить ресурс» → «Домен» → TXT-запись, либо Консоль администратора → «Домены» → «Подтвердить домен». Скопируйте значение целиком, начиная с google-site-verification=.",
+        "params": [
+          "verification"
+        ],
+        "requires_param": "verification",
+        "records": [
+          {
+            "host": "@",
+            "type": "TXT",
+            "value": "{verification}",
+            "ttl": 300,
+            "why": "подтверждение владения доменом для Google"
+          }
+        ],
+        "present_if": {
+          "type": "TXT",
+          "host": "@",
+          "prefix": "google-site-verification="
+        },
+        "confirm": true
+      },
+      {
+        "id": "mail",
+        "title": "Шаг 2. Почта Google: MX и SPF",
+        "summary": "Две MX на Google (приоритеты 1 и 5) и SPF с include:_spf.google.com. После этого входящая почта домена уходит в Google.",
+        "hint": "Если в зоне осталась MX на локальный mail (так Fornex создаёт новую зону), её надо заменить: две MX уведут часть писем мимо Google. Панель покажет такую запись как конфликт.",
+        "records": [
+          {
+            "host": "@",
+            "type": "MX",
+            "value": "SMTP.GOOGLE.COM",
+            "prio": 1,
+            "ttl": 300,
+            "why": "основная MX Google (приоритет 1)"
+          },
+          {
+            "host": "@",
+            "type": "MX",
+            "value": "SMTP.GOOGLE.COM.",
+            "prio": 5,
+            "ttl": 300,
+            "why": "вторая MX Google (приоритет 5); точка на конце обязательна — иначе Fornex отвергает дубль значения"
+          },
+          {
+            "host": "@",
+            "type": "TXT",
+            "value": "v=spf1 include:_spf.google.com ~all",
+            "ttl": 300,
+            "why": "SPF для Google; ~all, а не -all — письма сторонних рассыльщиков не отбрасываются"
+          },
+          {
+            "host": "@",
+            "type": "MX",
+            "value": "smtp.google.com.",
+            "prio": 10,
+            "ttl": 300,
+            "why": "третий MX (приоритет 10) на ту же цель; отличается регистром — Fornex отвергает дубль строки значения"
+          }
+        ],
+        "confirm": false
+      },
+      {
+        "id": "dkim",
+        "title": "Шаг 3. DKIM",
+        "summary": "Ключ домена для подписи писем. Google создаёт его в Консоли администратора только после того, как домен подтверждён (шаг 1) и включён Gmail.",
+        "hint": "Консоль администратора → «Приложения» → «Google Workspace» → «Gmail» → «Проверка подлинности почты» → «Создать новый ключ». Скопируйте строку v=DKIM1; k=rsa; p=… целиком.",
+        "params": [
+          "dkim"
+        ],
+        "requires": [
+          "verify"
+        ],
+        "requires_param": "dkim",
+        "records": [
+          {
+            "host": "google._domainkey",
+            "type": "TXT",
+            "value": "{dkim}",
+            "ttl": 3600,
+            "why": "DKIM домена для Google"
+          }
+        ],
+        "present_if": {
+          "type": "TXT",
+          "host": "google._domainkey",
+          "prefix": "v=dkim1"
+        },
+        "confirm": true
+      },
+      {
+        "id": "dmarc",
+        "title": "Шаг 4. DMARC",
+        "summary": "Политика для писем, которые не прошли SPF/DKIM, и адрес для отчётов. Нужна, чтобы получатели видели, что домен защищён.",
+        "hint": "Начните с p=none, когда убедитесь, что вся почта идёт через Google — переключайте на p=quarantine.",
+        "params": [
+          "dmarc"
+        ],
+        "records": [
+          {
+            "host": "_dmarc",
+            "type": "TXT",
+            "value": "{dmarc}",
+            "ttl": 3600,
+            "why": "DMARC: отчёт о подделках приходит на postmaster"
+          }
+        ],
+        "confirm": false
+      }
+    ]
+  },
+  "site-on-vps": {
+    "title": "Сайт на этом VPS",
+    "summary": "A-записи корня, www и (по желанию) wildcard на адрес сервера.",
+    "applies_to": "домен, чей сайт живёт на нашем сервере",
+    "params": [
+      {
+        "key": "web_ip",
+        "label": "IP сервера для сайта",
+        "type": "text",
+        "required": true,
+        "default": "{default_ip}",
+        "hint": "IPv4 адрес сервера, на котором живёт сайт."
+      },
+      {
+        "key": "wildcard",
+        "label": "Добавить запись * (wildcard)",
+        "type": "select",
+        "options": [
+          "нет",
+          "да"
+        ],
+        "default": "нет",
+        "required": false,
+        "hint": "Нужна, только если поддомены должны открывать тот же сайт."
+      }
+    ],
+    "records": [
+      {
+        "host": "@",
+        "type": "A",
+        "value": "{web_ip}",
+        "ttl": 300,
+        "why": "корень домена на наш сервер"
+      },
+      {
+        "host": "www",
+        "type": "A",
+        "value": "{web_ip}",
+        "ttl": 300,
+        "why": "www на тот же адрес"
+      },
+      {
+        "host": "*",
+        "type": "A",
+        "value": "{web_ip}",
+        "ttl": 300,
+        "when": "wildcard",
+        "when_value": "да",
+        "why": "wildcard: любой поддомен открывает тот же сайт"
+      }
+    ]
+  },
+  "yandex-mail": {
+    "title": "Яндекс 360 — почта домена",
+    "summary": "MX на mx.yandex.net, SPF с include:_spf.yandex.net, DKIM и DMARC.",
+    "applies_to": "домен, у которого почта в Яндекс 360",
+    "params": [
+      {
+        "key": "dkim",
+        "label": "DKIM-ключ из панели Яндекс 360",
+        "type": "textarea",
+        "required": false,
+        "hint": "Строка v=DKIM1; k=rsa; p=…; селектор у Яндекса — mail._domainkey."
+      },
+      {
+        "key": "dmarc",
+        "label": "Запись DMARC",
+        "type": "text",
+        "required": false,
+        "default": "v=DMARC1; p=quarantine; rua=mailto:postmaster@{domain}; pct=100"
+      }
+    ],
+    "records": [
+      {
+        "host": "@",
+        "type": "MX",
+        "value": "mx.yandex.net.",
+        "prio": 10,
+        "ttl": 300,
+        "why": "MX Яндекс 360"
+      },
+      {
+        "host": "@",
+        "type": "TXT",
+        "value": "v=spf1 include:_spf.yandex.net ~all",
+        "ttl": 300,
+        "why": "SPF для Яндекс 360"
+      },
+      {
+        "host": "mail._domainkey",
+        "type": "TXT",
+        "value": "{dkim}",
+        "ttl": 3600,
+        "when": "dkim",
+        "why": "DKIM Яндекс 360"
+      },
+      {
+        "host": "_dmarc",
+        "type": "TXT",
+        "value": "{dmarc}",
+        "ttl": 3600,
+        "when": "dmarc",
+        "why": "DMARC"
+      }
+    ]
+  },
+  "mail-on-vps": {
+    "title": "Почта на нашем VPS (Exim/Dovecot)",
+    "summary": "A для mail, MX на mail, SPF mx a, DKIM сервера и DMARC. Имя хоста должно совпадать с PTR.",
+    "applies_to": "домен, чья почта обслуживается нашим сервером",
+    "params": [
+      {
+        "key": "mail_ip",
+        "label": "IP почтового сервера",
+        "type": "text",
+        "required": true,
+        "default": "{default_ip}"
+      },
+      {
+        "key": "dkim",
+        "label": "DKIM-ключ сервера (селектор mail)",
+        "type": "textarea",
+        "required": false,
+        "hint": "Публичная часть из /etc/exim4/dkim/… Если не указать — запись не создаётся."
+      },
+      {
+        "key": "dmarc",
+        "label": "Запись DMARC",
+        "type": "text",
+        "required": false,
+        "default": "v=DMARC1; p=quarantine; rua=mailto:postmaster@{domain}; adkim=r; aspf=r; pct=100"
+      }
+    ],
+    "records": [
+      {
+        "host": "mail",
+        "type": "A",
+        "value": "{mail_ip}",
+        "ttl": 300,
+        "why": "имя почтового хоста"
+      },
+      {
+        "host": "@",
+        "type": "MX",
+        "value": "mail.{domain}.",
+        "prio": 10,
+        "ttl": 300,
+        "why": "входящая почта на наш сервер"
+      },
+      {
+        "host": "@",
+        "type": "TXT",
+        "value": "v=spf1 mx a -all",
+        "ttl": 300,
+        "why": "SPF: только мы отправляем письма домена"
+      },
+      {
+        "host": "mail._domainkey",
+        "type": "TXT",
+        "value": "{dkim}",
+        "ttl": 3600,
+        "when": "dkim",
+        "why": "DKIM сервера"
+      },
+      {
+        "host": "_dmarc",
+        "type": "TXT",
+        "value": "{dmarc}",
+        "ttl": 3600,
+        "when": "dmarc",
+        "why": "DMARC"
+      }
+    ]
+  }
+}

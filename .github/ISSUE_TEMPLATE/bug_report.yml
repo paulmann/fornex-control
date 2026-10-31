@@ -1,0 +1,54 @@
+name: Bug report
+description: Something behaves differently from what the documentation says
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste an API key, a password hash, a private key or a real client zone.
+        Replace the domain with `example.com` and addresses with `203.0.113.10`.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect
+      placeholder: The preset should update the existing SPF instead of creating a second one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened
+      description: The response body, the log line, the audit entry — whatever you have.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reproduce
+      placeholder: |
+        1. php backend/bin/fornex preset:apply example.com google-workspace --param:dkim='…'
+        2. the plan contains create MX instead of update MX
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The answer of GET /api/health, or the tag you installed.
+      placeholder: '1.1.0'
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: 'PHP 8.5.12, nginx + PHP-FPM, Debian 12, config outside the web root'
+    validations:
+      required: true

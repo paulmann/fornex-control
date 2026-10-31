@@ -1,0 +1,54 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Точка входа CLI: bin/fornex <команда> [ключи].
+ *
+ * Примеры:
+ *   php bin/fornex help
+ *   php bin/fornex domains
+ *   php bin/fornex zone:show example.com
+ *   php bin/fornex preset:apply example.com google-workspace --param:dkim="v=DKIM1; ..." --apply
+ *   php bin/fornex verify example.com
+ *
+ * Настройки берутся из того же файла, что и у панели, поэтому CLI и веб
+ * не расходятся: FORNEX_ENV → <корень>/.env → <корень>/../fornex.env,
+ * а если файла нет — из переменных окружения.
+ */
+
+declare(strict_types=1);
+
+use FornexPanel\Cli\Application;
+use FornexPanel\Kernel\Env;
+
+$root = dirname(__DIR__, 2);
+
+require $root . '/backend/autoload.php';
+
+$candidates = array_filter([
+    getenv('FORNEX_ENV') ?: null,
+    $root . '/.env',
+    dirname($root) . '/fornex.env',
+]);
+
+$envFile = null;
+foreach ($candidates as $candidate) {
+    if (is_string($candidate) && is_file($candidate) && is_readable($candidate)) {
+        $envFile = $candidate;
+        break;
+    }
+}
+
+if ($envFile !== null) {
+    Env::load($envFile);
+}
+
+if (Env::get('FORNEX_API_KEY') === null) {
+    fwrite(STDERR, "no configuration: expected ../fornex.env, FORNEX_ENV, or FORNEX_API_KEY in the environment (see .env.example)\n");
+    exit(2);
+}
+
+/** @var \FornexPanel\Kernel\App $app */
+$app = require $root . '/backend/bootstrap.php';
+
+exit((new Application($app->services()))->run($argv));

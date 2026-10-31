@@ -1,0 +1,42 @@
+name: Feature request
+description: A use case the panel does not cover yet
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What you are doing by hand today, and why the panel does not help.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: A preset, a rule, a CLI command, a route — say which shape fits.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Presets and the mail wizard
+        - Zone records and planning rules
+        - Verification (NS, MX, SPF, DKIM, DMARC, PTR)
+        - Interface
+        - CLI
+        - API and tokens
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What you tried instead
+      description: A manual route, a Fornex cabinet action, another tool.
+    validations:
+      required: false
