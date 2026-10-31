@@ -241,6 +241,7 @@ letter case, which DNS treats as the same host.
 
 | Document | Contents |
 |---|---|
+| [Wiki](https://github.com/paulmann/fornex-control/wiki) | long-form guides in Russian, 15 pages; sources in [`wiki/`](wiki/wiki.json) |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | kernel, services, request flow, where the rules live |
 | [`docs/API.md`](docs/API.md) | every route, auth, CSRF, error shapes |
 | [`docs/CLI.md`](docs/CLI.md) | every command and its keys |

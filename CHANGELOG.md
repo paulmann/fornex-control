@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Wiki published at <https://github.com/paulmann/fornex-control/wiki>: 13 pages in Russian
+  (why it exists, installation, configuration, architecture, API, CLI, mail presets, security,
+  operations, troubleshooting, development, FAQ) with a generated sidebar and footer; sources
+  live in `wiki/` and are built with `ghagent wiki build`.
+
 ### Changed
 
 - README: the summary paragraph now sits directly after the H1 and the language switcher

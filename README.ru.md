@@ -240,6 +240,7 @@ php backend/bin/fornex ns:status example.com         # делегировани�
 
 | Документ | Содержимое |
 |---|---|
+| [Wiki](https://github.com/paulmann/fornex-control/wiki) | подробные руководства, 15 страниц; исходники в [`wiki/`](wiki/wiki.json) |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | ядро, сервисы, путь запроса, где живут правила |
 | [`docs/API.md`](docs/API.md) | все маршруты, авторизация, CSRF, форматы ошибок |
 | [`docs/CLI.md`](docs/CLI.md) | все команды и их ключи |
